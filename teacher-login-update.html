@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Locator - Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .form-container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Teacher Update</h1>
+    <div class="form-container">
+        <input type="text" id="teacherName" placeholder="Enter your name" required>
+        <button onclick="login()">Login</button>
+        <div id="updateSection" style="display:none;">
+            <h2>Update Your Information</h2>
+            <input type="text" id="room" placeholder="New Room">
+            <input type="text" id="status" placeholder="New Status">
+            <button onclick="updateInfo()">Update</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulated teacher data
+        const teachers = [
+            { name: "Maria Santos", room: "Room 101", status: "Available" },
+            { name: "Juan Dela Cruz", room: "Room 102", status: "In a Meeting" },
+            { name: "Ana Reyes", room: "Room 103", status: "Available" }
+        ];
+
+        function login() {
+            const nameInput = document.getElementById('teacherName').value.trim();
+            const teacher = teachers.find(t => t.name === nameInput);
+
+            if (teacher) {
+                // Show the update section
+                document.getElementById('updateSection').style.display = 'block';
+                document.getElementById('room').value = teacher.room; // Pre-fill current room
+                document.getElementById('status').value = teacher.status; // Pre-fill current status
+                localStorage.setItem('currentTeacher', JSON.stringify(teacher)); // Store current teacher
+            } else {
+                alert("Teacher not found. Please enter a valid name.");
+            }
+        }
+
+        function updateInfo() {
+            const currentTeacher = JSON.parse(localStorage.getItem('currentTeacher'));
+            const newRoom = document.getElementById('room').value.trim();
+            const newStatus = document.getElementById('status').value.trim();
+
+            // Update the teacher's information
+            currentTeacher.room = newRoom;
+            currentTeacher.status = newStatus;
+
+            // Update the original array (in real app, this would be an API call)
+            const index = teachers.findIndex(t => t.name === currentTeacher.name);
+            if (index !== -1) {
+                teachers[index] = currentTeacher; // Update the original data
+                alert("Information updated successfully!");
+            }
+
+            // Optionally clear inputs or redirect
+        }
+    </script>
+</body>
+</html>
